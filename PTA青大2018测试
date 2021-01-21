@@ -1,0 +1,84 @@
+1、	下面这段程序，将循环有限次，在打印输出有限行之后，程序将正常结束。
+#include "stdio.h"
+int main()
+{
+    for(long num=1; num>0; num++)
+        printf("%ld\n", num);
+    return 0;
+}
+说明：num自加到溢出，为负数，小于0，循环结束
+
+2、以下名字，可以作为C语言标识符的是：
+A.	student-1
+B.	205Lab
+C.	$a
+D.	Car~2
+说明：$a可以作为标识符，GNU
+In GNU C, you may normally use dollar signs in identifier names.This is because many traditional C implementations allow such identifiers.However, dollar signs in identifiers are not supported on a few target machines, typically because the target assembler does not allow them.
+
+3、定义变量int a,b;，则表达式a = (b = 3, 4), 5;执行过后，a、b的值分别是：
+A.5， 4
+B.4， 4
+C.4， 3
+D.3， 3
+说明：C语言算术优先级，赋值运算符大于逗号运算符
+4、执行以下程序：
+#include <stdio.h>
+int main( )
+{
+    int num, r;
+    num = 16;
+    r = num % 2;
+    if(r=0) printf("even");
+    else printf("odd");
+    return 0;
+}
+程序运行结果（即：在屏幕上打印的内容）是 
+说明：if的条件是r=0，不是r==0，有个坑
+
+5、下面这段程序打印输入的整数num的最高位数字（例如，输入321，则打印3；输入-678，则打印6）。请填写空缺的代码。
+
+#include <stdio.h>
+int main()
+{
+    int num;
+    scanf("%d", &num);
+    int digit=0;
+    if( num < 0)  （num = 0 - num） ;
+    while(num >0 )
+    {
+           digit = num % 10;
+            num = num / 10;
+    }
+    printf("%d\n", digit);
+    return 0;
+}
+说明：错了两个用例，修改之后填了上去，应该是对的。以前做过，一着急脑子不转个了
+
+6、哥德巴赫猜想是：任何一个大于2的偶数可以写为两个质数之和。下面这段程序验证这个猜想，对于输入的大于2的偶数，给出其等于两个质数之和的算式；对于非法输入，给出输入无效的提示
+#include <stdio.h>
+int isPrime(int num)
+{
+    for(int i=2; i<=num/2; i++)
+        if(  num%i ==0 ) return 0;
+        return 1;
+}
+int main( )
+{
+    int a;
+    for(int i=0; i<4; i++)
+	{   //共进行4次验证
+        scanf("%d",&a);  //输入一个整数
+        if(   a%2 !=0 ||a<=2  ) printf("Invalid Input\n"); // 输入有效性验证
+        else for(int i=2; i<=a/2; i++)
+                if(  isPrime(i) &&isPrime(a-i)  )
+				{
+                    printf("%d = %d + %d\n", a, i, a-i);
+                    break;
+                }
+    }
+    return 0;
+}
+
+说明：错了两个用例，a<=2,不需要复合运算符
+
