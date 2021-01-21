@@ -82,3 +82,322 @@ int main( )
 
 说明：错了两个用例，a<=2,不需要复合运算符
 
+函数题和程序题感觉都不难啊，但是想过用例比较麻烦，自己写的bug多，在考试的环境下，速度太慢了。第一个题做完还是30多分钟，第二个做完直接没了，第三题做完了没有放进来。第四题没看，速度太慢了。出现用例不过，
+卡住的时间比较多。
+
+函数题
+某歌唱比赛计分规则是：对于评委给出的分数，去掉一个最高分，去掉一个最低分，剩余分数求算术平均值并保留2位小数，作为选手最终得分。
+本题要求实现这样一个计分函数。
+评委给出的分数存在数组中，分数均为0~100之间的整数，并且保证评委人数在3~20之间。
+函数接口定义：
+
+double getScore(int *score, int total);
+
+其中score和total是传入的参数，score是评委打分数组的首地址，total是评委人数；
+函数将选手的得分以double类型返回，注意：函数返回的分数只需保证小数点后至少2位精确数字即可，打印2位小数得分的操作由函数调用者进行。
+裁判测试程序样例：
+
+/* 此测试程序仅为示例，实际的测试程序可能不同，不要仅针对样例的输入和输出编写函数，而是要根据题意要求编写函数 */
+#include <stdio.h>
+double getScore(int *score, int total);
+int main(){
+    int score[5] = {92, 90, 99, 95, 98};   /* 仅为示例，实际的测试程序中，数组大小和元素数值都可能与样例不同 */
+    printf("%.2f\n", getScore(score, 5) );  /* getScore( )函数只负责返回分值，由main函数中的代码负责按照2位小数打印输出 */
+    return 0;
+}
+/* 你所编写的函数代码将被嵌在这里，注意：不要提交你编写的用于测试的main( )函数，否则无法通过编译 */
+
+输入样例：
+
+对于本题给出的裁判测试程序样例，没有输入。实际的裁判程序可能有输入。
+
+输出样例：
+
+对于本题给出的裁判测试程序样例，只有一行输出如下。实际的裁判程序可能有其他输出情况。
+95.00
+答案
+double getScore(int *score, int total)
+{
+	int min = 0, max = 0,i=0;
+	int sum = 0;
+	if (total > 20 || total < 3)
+	{
+		printf("评委人数不对");
+		return 0;
+	}
+	for (i = 0; i < total; i++)
+	{
+		sum += score[i];
+		if (score[i]>score[max])
+		{
+			max = i;
+
+		}
+		if (score[i] < score[min])
+		{
+			min = i;
+		}
+	}
+	return (double)(sum - score[min] - score[max]) / (total - 2);
+
+}
+
+
+
+学生结构体定义如下：
+
+struct Student{
+    int sid;
+    int C;
+    int English;
+};
+
+其中sid是学号，C是C语言课程成绩，English是英语课程成绩。学生的成绩按照这样的规则比较：
+
+    先比较两门课的总成绩，总成绩高的为优；
+    若总成绩相同，再比较C语言成绩，C语言成绩高的为优；
+    若C语言成绩也相同，则说明两名学生成绩相等。
+
+编写函数实现成绩的比较。
+函数接口定义：
+
+int compareScore(const struct Student *s1, const struct Student *s2);
+
+其中s1和s2是传入的参数，分别指向两名学生的结构体变量。函数返回值为int型，
+
+    若s1所指学生成绩优于s2所指学生，返回1；
+    若s2所指学生成绩优于s1所指学生，返回-1；
+    若两学生成绩相等，返回0。
+
+裁判测试程序样例：
+
+/* 此测试程序仅为示例，实际的测试程序可能不同。 
+注意：实际的测试程序可能有多组输入、进行多次比较，输入格式也有可能不同，
+因此不要针对测试程序样例编写代码，而应当编写符合题目要求的函数 */
+
+#include <stdio.h>
+struct Student{
+    int sid;
+    int C;
+    int English;
+};
+int compareScore(const struct Student *s1, const struct Student *s2);
+int main(){
+    struct Student zs, ls;
+    scanf("%d%d%d", &zs.sid, &zs.C, &zs.English);
+    scanf("%d%d%d", &ls.sid, &ls.C, &ls.English);
+    int r;
+    r = compareScore(&zs, &ls);
+    if(r < 0) printf("Less\n");
+    else if(r > 0) printf("Greater\n");
+    else printf("Equal\n");
+    return 0;
+}
+/* 你所编写的函数代码将被嵌在这里 */
+
+输入样例1：
+
+对于样例测试程序的输入格式：
+
+1 95 90
+2 90 91
+
+输出样例1：
+
+对于样例测试程序的输出格式：
+
+Greater
+
+输入样例2：
+
+对于样例测试程序的输入格式：
+
+1 90 95
+2 95 90
+
+输出样例2：
+
+对于样例测试程序的输出格式：
+
+Less
+
+答案
+int compareScore(const struct Student *s1, const struct Student *s2)
+{
+	if ((s1->C + s1->English) > (s2->C + s2->English))
+	{
+		return 1;
+	}
+	else if ((s1->C + s1->English) < (s2->C + s2->English))
+	{
+		return -1;
+	}
+	else
+	{
+		if (s1->C>s2->C)
+		{
+			return 1;
+		}
+		else if (s1->C == s2->C)
+		{
+			return 0;
+		}
+		else
+		{
+			return -1;
+		}
+
+	}
+}
+
+7-1
+统计各类字符数量并输出字母
+(12分)
+
+对于输入的一行字符，统计其中各类字符的数量，并将其中的字母大小写互换后输出。
+输入格式:
+
+在一行内输入各类字符（行末以换行符结束），字符总数不少于1个、不超过2000个。
+输出格式:
+
+输出为两行：
+先按照输入的顺序，将其中的字母大小写互换后，在第一行输出，
+再统计输入的各类字符数量，按照 letters:<l>, digits:<d>, spaces:<s>, others:<o>. 的格式在第二行输出。
+注意
+
+    统计字符数量，不包含行末输入的换行符；
+    上述格式中<l> <d> <s> <o>分别表示字母、数字、空格、其它字符的数量，输出时以实际数量代替；
+    在第一行只输出大小写互换后的字母，不输出其它字符；
+    要严格按照规定格式输出，不能随意增减空格、换行等字符。
+
+输入样例:
+
+ABC xyz 123 ?!
+
+输出样例:
+
+abcXYZ
+letters:6, digits:3, spaces:3, others:2.
+
+答案，没写完。但是应该没问题吧
+int main(void)
+{
+	char str[2000],ch;
+	int i = 0, letter = 0,  digits=0 , spaces=0 , others=0  ;
+	gets(str);
+
+	int len = strlen(str);
+	for (i = 0; i < len; i++)
+	{
+		if( (str[i] >= 'a'&& str[i] <= 'z') || (str[i] >= 'A'&& str[i] <= 'Z'))
+		{
+			letter++;
+			if (str[i] >= 'a'&& str[i] <= 'z')
+			{
+				str[i] = str[i] + 'A' - 'a';
+			}
+			else
+			{
+				str[i] = str[i] + 'a' - 'A';
+			}
+			printf("%c", str[i]);
+		}
+		else if(str[i] >= '0'&& str[i] <= '9')
+		{
+			digits++;
+		}
+		else if (str[i] == ' ')
+		{
+			spaces++;
+		}
+		else
+		{
+			others++;
+		}
+	}
+	printf("\n");
+	printf("letter = %d digits = %d space = %d other = %d", letter, digits, spaces, others);
+}
+说明：输入的时候卡了半天，想用while  getchar循环，没弄明白；求出长度，在for循环里把事情多做了。
+
+7-2
+方阵对角线元素求和及计数
+(12分)
+
+对输入的一个N*N的方阵，求其两条对角线上的元素之和及非零元素的数量。
+输入格式:
+
+第一行输入一个不超过20的正整数N，
+在接下来的N行中，依次输入方阵的每一行的N个元素，方阵元素为绝对值不超过1000的整数，中间以空格间隔。
+输出格式:
+
+在一行中以sum = <s>, count = <c>.的格式输出方阵两对角线上的元素之和以及非零元素的数量，其中<s>和<c>分别表示元素之和、非零元素数量，输出时以实际数量替换。
+提示：（1）两条对角线的交叉元素不重复计算；（2）严格按规定格式输出，不得随意增删空格、换行等字符。
+输入样例1:
+
+4
+1 2 3 4
+1 2 3 4
+0 1 2 3
+0 1 2 3
+
+输出样例1:
+
+sum = 16, count = 7.
+
+输入样例2:
+
+5
+1 2 3 2 1
+1 2 3 2 1
+1 2 3 2 1
+1 2 3 2 1
+1 2 3 2 1
+
+输出样例:
+
+sum = 15, count = 9.
+
+#define N 20
+
+int main(void)
+{
+	int arr[N][N] = { 0 };
+	int num = 0;
+	int i = 0, j = 0;
+	int sum = 0, count = 0;
+	do
+	{
+		scanf("%d", &num);
+	} while (num>20 || num <=0);
+
+	for (i = 0; i < num; i++)
+	{
+		for ( j = 0; j < num; j++)
+		{
+			scanf("%d", &arr[i][j]); 
+			
+			if (i == j || i == num - j-1)
+			{
+				if (arr[i][j] != 0)
+				{
+					count++;
+				}
+				
+				sum = sum + arr[i][j];
+			}
+		}
+	}
+	if (num % 2 != 0)
+	{
+		sum - arr[num / 2][num / 2];
+	}
+	printf("sum = %d count = %d", sum, count);
+}
+说明：矩阵中间那个重复的元素不太好找，只能单独写一行判断了。也比较常规，就是在输入的时候就把判断、累加做完了，少了个for循环。写之前不确定，写之后一看调试结果，确定了。
+一开始题看错了，count的值找错了。对角线元素的下标也错了，i==j  i== num-j-1，忘了-1。
+
+
+
+
+	
